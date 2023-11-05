@@ -1,23 +1,21 @@
 table {
-  font-family: arial, sans-serif;
   border-collapse: collapse;
-  width: 100%;
+  font-family: arial, sans-serif;
   table-layout: fixed;
+  width: 100%;
 }
-
 td,
 th {
   border: 1px solid #dddddd;
-  text-align: left;
   padding: 8px;
+  text-align: left;
 }
-
 td {
   .name {
     display: inline-block;
-    width: 100%;
+    overflow: hidden;
     text-overflow: ellipsis;
     white-space: nowrap;
-    overflow: hidden;
+    width: 100%;
   }
 }

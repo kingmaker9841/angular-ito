@@ -1,0 +1,34 @@
+<h1>Add</h1>
+
+<form class="form-container" [formGroup]="songForm" (ngSubmit)="onSubmit()">
+  <div class="form-field">
+    <label for="name">Name:</label>
+    <input
+      type="text"
+      id="name"
+      formControlName="name"
+      [ngClass]="{ 'highlight-error': isFieldInvalid('name') }"
+    />
+  </div>
+
+  <div class="form-field">
+    <label for="list">Singers (comma-separated):</label>
+    <input
+      type="text"
+      id="list"
+      formControlName="list"
+      [ngClass]="{ 'highlight-error': isFieldInvalid('list') }"
+    />
+  </div>
+
+  <div class="form-field">
+    <label for="type">Type:</label>
+    <select id="type" formControlName="type">
+      <option value="pop">Pop</option>
+      <option value="rock">Rock</option>
+      <option value="metal">Metal</option>
+    </select>
+  </div>
+
+  <button type="submit">Add Song</button>
+</form>

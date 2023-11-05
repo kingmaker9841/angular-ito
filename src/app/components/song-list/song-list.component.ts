@@ -1,4 +1,13 @@
-import { ChangeDetectionStrategy, Component, EventEmitter, Input, Output } from '@angular/core';
+import {
+  ChangeDetectionStrategy,
+  Component,
+  EventEmitter,
+  Input,
+  Output,
+} from '@angular/core';
+
+import { Router } from '@angular/router';
+import { Song } from 'src/models/song.model';
 
 @Component({
   selector: 'app-song-list',
@@ -8,27 +17,70 @@ import { ChangeDetectionStrategy, Component, EventEmitter, Input, Output } from 
 })
 export class SongListComponent {
   @Input()
-  songLists: any = [];
+  songLists: Array<Song> = [];
 
   @Output()
   onSongViewDetailClicked: EventEmitter<string> = new EventEmitter<string>();
 
-  constructor() {}
+  constructor(private router: Router) {}
 
   /**
-   * Combine List of singers in the form of
-   * eg.
-   * [A] -> A
-   * [A,B] -> A and B
-   * [A,B,B] -> A, B and C
-   * [A,B,C,D] -> A, B , C and D
-   * [A,B,C,D,E,F] -> A, B, C, D, E and 1 Others
-   * [A,B,C,D,E,F,G] -> A, B, C, D, E and 2 Others
-   * @param valueArray
-   * @returns
+   * Combines a list of singers into a formatted string.
+   *
+   * @param valueArray - Array of singer names
+   * @returns A formatted string of combined singer names
    */
-  combineSingerList(valueArray: Array<any>) {
-    return valueArray.toString();
+  combineSingerList(valueArray: Array<string>): string {
+    const numberOfSingersToShow = 5; // Number of singers to show before using "and X others"
+    const singers = [...valueArray]; // Clone the array to avoid modifying the original
+
+    if (singers.length === 0) {
+      return 'No Singers';
+    }
+
+    return this.formatSingers(singers, numberOfSingersToShow);
+  }
+
+  /**
+   * Formats the list of singer names into a readable string.
+   *
+   * @param singers - Array of singer names
+   * @param numberOfSingersToShow - Maximum number of singers to display before using "and X others"
+   * @returns A formatted string of combined singer names
+   */
+  private formatSingers(
+    singers: Array<string>,
+    numberOfSingersToShow: number
+  ): string {
+    if (singers.length === 1) {
+      return singers[0];
+    }
+
+    if (singers.length <= numberOfSingersToShow) {
+      return (
+        singers.slice(0, singers.length - 1).join(', ') +
+        ' and ' +
+        singers[singers.length - 1]
+      );
+    }
+
+    const displayedSingers = singers.slice(0, numberOfSingersToShow);
+    const othersCount = singers.length - numberOfSingersToShow;
+    const othersString =
+      othersCount === 1 ? '1 Other' : `${othersCount} Others`;
+
+    return this.formatList(displayedSingers, ', ') + ' and ' + othersString;
+  }
+
+  /**
+   * Formats a list of items into a string with the given separator.
+   *
+   * @param items - Array of items to format
+   * @param separator - The separator to use between items
+   * @returns A formatted string
+   */
+  private formatList(items: Array<string>, separator: string): string {
+    return items.join(separator);
   }
 
   /**
@@ -36,14 +88,15 @@ export class SongListComponent {
    *
    * @param song - Selected song
    */
-  viewDetail(song: any) {
+  viewDetail(song: Song) {
     this.onSongViewDetailClicked.emit(song.uri);
   }
 
   /**
    * Open form with the prefilled data and allow to update the content
    */
-  editSongs() {
+  editSong(song: Song) {
     // Place your logic
+    this.router.navigate(['/edit-song', song.uri]);
   }
 }

@@ -1,5 +1,7 @@
-import { Injectable } from '@angular/core';
 import { Observable, of } from 'rxjs';
+
+import { Injectable } from '@angular/core';
+import { Song } from 'src/models/song.model';
 import { songsCollection } from '../mockData/songs';
 
 @Injectable({
@@ -16,7 +18,7 @@ export class DataApiService {
    *
    * @returns
    */
-  public fetchSongs(): Observable<any> {
+  public fetchSongs(): Observable<Array<Song>> {
     return of(this.allSongs);
   }
 
@@ -27,16 +29,24 @@ export class DataApiService {
    * @returns
    */
   public getSongsByName(songName: string) {
-    const songs = this.allSongs.filter((song) => song.name.includes(songName));
-
-    return new Observable((observer) => {
-      setTimeout(() => {
-        observer.next(songs);
-      }, 2000);
-    });
+    const songs = this.allSongs.filter((song) =>
+      song.name.toLowerCase().includes(songName.toLowerCase())
+    );
+    return of(songs);
   }
 
-  public addSong() {}
+  public addSong(newSong: Song): void {
+    this.allSongs.push(newSong);
+  }
 
-  public updateSong() {}
+  public updateSong(updatedSong: Song, songId: string) {
+    const updatedSongIndex = this.allSongs.findIndex(
+      (song) => song.uri === songId
+    );
+    this.allSongs[updatedSongIndex] = updatedSong;
+  }
+
+  public getSongCount() {
+    return this.allSongs.length;
+  }
 }

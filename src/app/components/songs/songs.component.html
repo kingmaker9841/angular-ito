@@ -17,3 +17,7 @@
   <div>Type: {{ selectedSong.type }}</div>
   <button *ngIf="selectedSong.type !== 'metal'" (click)="changeSongToMetal()">Change to metal</button>
 </div>
+
+<div>
+    <a [routerLink]="['/add-song']" >Add a Song</a>
+</div>
