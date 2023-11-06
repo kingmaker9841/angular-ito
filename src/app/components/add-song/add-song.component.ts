@@ -101,7 +101,7 @@ export class AddSongComponent implements OnInit, OnDestroy {
   /**
    * Saves the form data to local storage if it was edited.
    */
-  private saveFormIfEdited(): void {
+  saveFormIfEdited(): void {
     if (this.isFormEdited()) {
       localStorage.setItem('songFormData', JSON.stringify(this.songForm.value));
     }

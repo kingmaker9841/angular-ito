@@ -8,5 +8,5 @@ export interface Song {
   uri: string;
   name: string;
   type: SongType;
-  singerList: string[];
+  singerList: Array<string>;
 }
